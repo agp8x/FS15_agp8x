@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<modDesc descVersion="22">
+    <author>agp8x</author>
+    <version>1.0.0.0</version>
+    <title>
+        <en>siloBaler</en>
+        <de>siloBaler</de>
+    </title>
+    <description>
+        <en>siloBaler</en>
+        <de>siloBaler</de>
+    </description>
+    <iconFilename>store_kroneBigPack1290.png</iconFilename>
+    <multiplayer supported="true"/>
+
+    <specializations>
+        <specialization name="siloBaler" className="SiloBaler" filename="siloBaler.lua" />
+        <specialization name="hide" className="Hider" filename="hide.lua" />
+    </specializations>
+
+    <vehicleTypes>
+        <type name="siloBaler" className="Vehicle" filename="$dataS/scripts/vehicles/Vehicle.lua">
+        <specialization name="workArea" />
+        <specialization name="attachable" />
+        <specialization name="turnOnVehicle" />
+        <specialization name="animatedVehicle" />
+        <specialization name="cylindered" />
+        <specialization name="foldable" />
+        <specialization name="fillable" />
+        <specialization name="pickup" />
+        <specialization name="baler" />
+        <specialization name="powerConsumer" />
+        <specialization name="washable" />
+        <specialization name="mountable" />
+        <specialization name="siloBaler" />
+    </type>
+        <type name="siloBaler_hardpoint" className="Vehicle" filename="$dataS/scripts/vehicles/Vehicle.lua">
+        <specialization name="workArea" />
+        <specialization name="attachable" />
+        <specialization name="turnOnVehicle" />
+        <specialization name="animatedVehicle" />
+        <specialization name="cylindered" />
+        <specialization name="foldable" />
+        <specialization name="fillable" />
+        <specialization name="pickup" />
+        <specialization name="baler" />
+        <specialization name="powerConsumer" />
+        <specialization name="washable" />
+        <specialization name="mountable" />
+        <specialization name="siloBaler" />
+        <specialization name="hide" />
+    </type>
+    </vehicleTypes>
+
+    <storeItems>
+        <storeItem>
+            <name>Pantera 4502</name>
+            <specs>
+                <fillTypes>fertilizer</fillTypes>
+                <workingWidth>41.0</workingWidth>
+                <capacity unit="$l10n_unit_liter">4500</capacity>
+            </specs>
+            <functions>
+                <function>$l10n_function_sprayer</function>
+            </functions>
+            <image active="store_kroneBigPack1290.png" brand="$data/vehicles/store/brand_newholland.png"/>
+            <price>240</price>
+            <dailyUpkeep>310</dailyUpkeep>
+            <xmlFilename>newHollandBB1290.xml</xmlFilename>
+            <rotation>0</rotation>
+            <brand>AMAZONE</brand>
+            <category>baling</category>
+        </storeItem>
+        <storeItem>
+            <name>Pantera 4502 HP</name>
+            <specs>
+                <fillTypes>wheat_windrow dryGrass_windrow chaff</fillTypes>
+                <capacity unit="$l10n_unit_liter">400</capacity>
+            </specs>
+            <functions>
+                <function>$l10n_function_baler</function>
+            </functions>
+            <image active="store_kroneBigPack1290.png" brand="$data/vehicles/store/brand_newholland.png"/>
+            <price>24</price>
+            <dailyUpkeep>310</dailyUpkeep>
+            <xmlFilename>newHollandBB1290_hp.xml</xmlFilename>
+            <rotation>0</rotation>
+            <brand>AMAZONE</brand>
+            <category>baling</category>
+        </storeItem>
+    </storeItems>
+	<l10n>
+		<text name="agp8x_workstate0">
+			<de>Siloballen</de>
+			<en>Silo balls</en>
+		</text>
+		<text name="agp8x_workstate1">
+			<de>Stroh-/Heu-ballen</de>
+			<en>Straw/Grass balls</en>
+		</text>
+		<text name="agp8x_change_workstate">
+			<de>Presse umschalten</de>
+			<en>Switch press</en>
+		</text>
+		<text name="agp8x_workstate">
+			<de>Pressmodus:</de>
+			<en>press setting:</en>
+		</text>
+	</l10n>
+</modDesc>

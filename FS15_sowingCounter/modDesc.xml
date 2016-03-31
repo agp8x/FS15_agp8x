@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<modDesc descVersion="21">
+   <author>agp8x</author>
+    <title>
+		<en>SowingCounter</en>
+    </title>
+    <description>
+        <en>This modification adds the specializations SowingCounter (by agp8x, based on ThreshingCounter by Manuel Leithner/SFM-Modding) to all sowing machines.
+(except mod-vehicles that already have this specializations)</en>
+ 	</description>
+    <multiplayer supported="true"/>   
+	<iconFilename>store_ThreshingCounter.png</iconFilename>
+	<version>3.1</version>
+	<l10n>
+	</l10n>
+	<inputBindings>
+    </inputBindings>
+	<extraSourceFiles>
+        <sourceFile filename="register.lua" />
+    </extraSourceFiles>    
+</modDesc>

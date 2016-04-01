@@ -13,48 +13,62 @@ function SiloBaler.prerequisitesPresent(specializations)
 end;
 function SiloBaler:load(xmlFile)
 	self.switchWorkstate = SiloBaler.switchWorkstate;
-	self.setPickupState_orig = self.setPickupState;
 	self.setPickupState = SiloBaler.setPickupState;
-	self.pickup=Utils.indexToObject(self.components,getXMLString(xmlFile,"vehicle.pickup#index"));
-    
-	self:switchWorkstate(0);--0: silobaling; 1:normal
+	self.allowPickingUp = SiloBaler.allowPickingUp;
+	
+	self.pickup = Utils.indexToObject(self.components,getXMLString(xmlFile,"vehicle.siloBaler#pickupIndex"));
+	local state = Utils.getNoNil(getXMLBool(xmlFile, "vehicle.siloBaler#initialSilobaling"), true);
+	self:switchWorkstate(state);
+	self.workstateDirty = self:getNextDirtyFlag();
 	
 	local i=0;
 	while true do
-		local key = string.format("vehicle.extraBales.bale(%d)", i);
+		local key = string.format("vehicle.siloBaler.bale(%d)", i);
 		if not hasXMLProperty(xmlFile, key) then
             break;
         end;
-		local fillType=getXMLString(xmlFile, key.."#fillType");
-		local filename=getXMLString(xmlFile, key.."#filename");
-		if fillType ~=nil and filename ~=nil then
+		local fillType = getXMLString(xmlFile, key.."#fillType");
+		local filename = getXMLString(xmlFile, key.."#filename");
+		if fillType ~= nil and filename ~= nil then
 			local isRoundBale = Utils.getNoNil(getXMLBool(xmlFile, key.."#isRoundBale"), false);
 			local width = Utils.round(Utils.getNoNil(getXMLFloat(xmlFile, key.."#width"), 1.2), 2);
 			local height = Utils.round(Utils.getNoNil(getXMLFloat(xmlFile, key.."#height"), 0.9), 2);
 			local length = Utils.round(Utils.getNoNil(getXMLFloat(xmlFile, key.."#length"), 2.4), 2);
 			local diameter = Utils.round(Utils.getNoNil(getXMLFloat(xmlFile, key.."#diameter"), 1.8), 2);
 			local key = BaleUtil.getBaleKey(fillType, width, height, length, diameter, isRoundbale);
-			if BaleUtil[key]==nil then
+			if BaleUtil[key] == nil then
 				BaleUtil.registerBaleType(filename, fillType, width, height, length, diameter, isRoundbale);
 			end;
 		end;
-		i=i+1;
+		i = i + 1;
 		end;
 end;
 function SiloBaler:delete()
 end;
 function SiloBaler:readStream(streamId, connection)
+	self:switchWorkstate(streamReadBool(streamId));
 end;
 function SiloBaler:writeStream(streamId, connection)
+	streamWriteBool(streamId, self.siloBaling);
+end;
+function SiloBaler:readUpdateStream(streamId, timestamp, connection)
+	if streamReadBool(streamId) then
+		self:switchWorkstate(streamReadBool(streamId));
+	end;
+end;
+function SiloBaler:writeUpdateStream(streamId, connection, dirtyMask)
+	if streamWriteBool(streamId, bitAND(dirtyMask, self.workstateDirty) ~= 0) then
+		streamWriteBool(streamId, self.siloBaling);
+	end;
 end;
 function SiloBaler:loadFromAttributesAndNodes(xmlFile, key, resetVehicles)
-    local state = Utils.getNoNil(getXMLInt(xmlFile, key.."#workstate"),0);
+    local state = Utils.getNoNil(getXMLBool(xmlFile, key.."#workstate"), true);
 	self:switchWorkstate(state);
     return BaseMission.VEHICLE_LOAD_OK;
 end;
 function SiloBaler:getSaveAttributesAndNodes(nodeIdent)
     local nodes = "";
-	attributes = 'workstate="'..self.workstate..'"';
+	attributes = 'workstate="'..tostring(self.siloBaling)..'"';
     return attributes,nodes;
 end;
 function SiloBaler:mouseEvent(posX, posY, isDown, isUp, button)
@@ -63,104 +77,55 @@ function SiloBaler:keyEvent(unicode, sym, modifier, isDown)
 end;
 function SiloBaler:update(dt)
     if self:getIsActiveForInput() then
-        if InputBinding.hasEvent(InputBinding.IMPLEMENT_EXTRA3) and not self:getIsTurnedOn() then
-            if self.workstate==0 then
-				self:switchWorkstate(1);
-			else
-				self:switchWorkstate(0);
-			end;
-			--print("workstate changed to"..self.workstate);
+        if InputBinding.hasEvent(InputBinding.IMPLEMENT_EXTRA3) then
+			self:raiseDirtyFlags(self.workstateDirty);
+            self:switchWorkstate(not self.siloBaling);
         end;
     end;
 end;
 function SiloBaler:updateTick(dt)
-    if self:getIsActive() and self.isTurnedOn and self.isServer then
-		if self.workstate==0 then
-			--SILOBALING
-			if self.baleUnloadAnimationName == nil and self.fillLevel-self.lastFillLevel>0 then
-				-- move all bales
-				local deltaTime = self:getTimeFromLevel(self.fillLevel-self.lastFillLevel);
-				self:moveBales(deltaTime);
-			end;
-			self.lastFillLevel=self.fillLevel
-			if self.fillLevel >= self.capacity then
-				local usedFillType=self.currentFillType;
-				if self.baleTypes ~= nil then
-					if self.baleAnimCurve ~= nil then
-						local restDeltaFillLevel = 0
-						self:setFillLevel(restDeltaFillLevel, usedFillType);
-						self:createBale(usedFillType, self.capacity);
-						local numBales = table.getn(self.bales);
-						local bale = self.bales[numBales]
-						self:moveBale(numBales, self:getTimeFromLevel(restDeltaFillLevel), true);
-						-- note: self.bales[numBales] can not be accessed anymore since the bale might be dropped already
-						g_server:broadcastEvent(BalerCreateBaleEvent:new(self, usedFillType, bale.time), nil, nil, self);
-					elseif self.baleUnloadAnimationName ~= nil then
-						self:createBale(usedFillType, self.capacity);
-						g_server:broadcastEvent(BalerCreateBaleEvent:new(self, usedFillType, 0), nil, nil, self);
-					end;
-				end;
-			end;
-		end;
-	end;
 end;
 function SiloBaler:draw()
     if self.isClient then
         if self:getIsActiveForInput(true) and not self:getIsTurnedOn() then
 			g_currentMission:addHelpButtonText(g_i18n:getText("agp8x_change_workstate"), InputBinding.IMPLEMENT_EXTRA3);
-			g_currentMission:addExtraPrintText(g_i18n:getText("agp8x_workstate").."  "..g_i18n:getText("agp8x_workstate"..self.workstate));
+			local i = 0;
+			if not self.siloBaling then
+				i = 1;
+			end;
+			g_currentMission:addExtraPrintText(g_i18n:getText("agp8x_workstate").."  "..g_i18n:getText("agp8x_workstate"..i));
         end
     end;
 end;
 function SiloBaler:onTurnedOn(noEventSend)
-	if self.workstate==0 then
-		self.allowFillFromAir=true;
+	if not self.siloBaling then
+		self.allowFillFromAir = false;
 	end;
 end;
 function SiloBaler:onTurnedOff(noEventSend)
-	if self.workstate==0 then
-		self.allowFillFromAir=false;
-	end;
 end;
 function SiloBaler:switchWorkstate(newState)
-	--0: silobaling; 1:normal
-	if newState ~= self.workstate and not self:getIsTurnedOn() then
-		if newState==1 then
-			self.workstate=1;
-			setVisibility(self.pickup, true);
-			self.allowFillFromAir=false;
-		else
-			self:setPickupState_orig(false);
-			self.workstate=0;
+	if newState ~= self.siloBaling and not self:getIsTurnedOn() then
+		if newState then
+			self:setPickupState(false);
+			self.siloBaling = true;
 			setVisibility(self.pickup, false);
-			self.lastFillLevel=self.fillLevel;
+			self.lastFillLevel = self.fillLevel;
+		else
+			self.siloBaling = false;
+			setVisibility(self.pickup, true);
 		end;
 	end;
 end;
 function SiloBaler:setPickupState(isLowered, noEvent)
-	if self.workstate~=0 then
-		self:setPickupState_orig(isLowered, noEvent);
+	if not self.siloBaling then
+		Pickup.setPickupState(self, isLowered, noEvent);
 	end;
 end;
 
-local getBale_orig = BaleUtil.getBale;
-local allowPickup_orig= Baler.allowPickingUp;
-
-function BaleUtil.getBale(fillType, width, height, length, diameter, isRoundbale)
-	if FruitUtil.fillTypeToFruitType[fillType] == nil or FruitUtil.fruitIndexToDesc[FruitUtil.fillTypeToFruitType[fillType]].windrowName == nil then
-		--override no windrow filltype
-		local key = BaleUtil.getBaleKey(Fillable.fillTypeIntToName[fillType], width, height, length, diameter, isRoundbale);
-		if BaleUtil[key] ~= nil then
-			local desc=BaleUtil.baleIndexToDesc[BaleUtil[key]]
-			return desc;
-		end;
-	end;
-	-- default
-	return getBale_orig(fillType, width, height, length, diameter, isRoundbale)
-end;
-function Baler.allowPickingUp(self, superFunc)
-	if self.workstate==0 then
+function SiloBaler:allowPickingUp(superFunc)
+	if self.siloBaling then
 		return false;
 	end;
-	return allowPickup_orig(self, superFunc);
+	return Baler.allowPickingUp(self, superFunc);
 end;

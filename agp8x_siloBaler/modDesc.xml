@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="22">
     <author>agp8x</author>
-    <version>1.0.0.0</version>
+    <version>0.9</version>
     <title>
         <en>siloBaler</en>
         <de>siloBaler</de>
@@ -12,9 +12,13 @@
     </description>
     <iconFilename>store_kroneBigPack1290.png</iconFilename>
     <multiplayer supported="true"/>
+	<extraSourceFiles>
+        <sourceFile filename="nonWindrowingBales.lua" />
+    </extraSourceFiles>
 
     <specializations>
         <specialization name="siloBaler" className="SiloBaler" filename="siloBaler.lua" />
+        <specialization name="FillableBaler" className="FillableBaler" filename="FillableBaler.lua" />
         <specialization name="hide" className="Hider" filename="hide.lua" />
     </specializations>
 
@@ -32,9 +36,10 @@
         <specialization name="powerConsumer" />
         <specialization name="washable" />
         <specialization name="mountable" />
+        <specialization name="FillableBaler" />
         <specialization name="siloBaler" />
     </type>
-        <type name="siloBaler_hardpoint" className="Vehicle" filename="$dataS/scripts/vehicles/Vehicle.lua">
+        <!--type name="siloBaler_hardpoint" className="Vehicle" filename="$dataS/scripts/vehicles/Vehicle.lua">
         <specialization name="workArea" />
         <specialization name="attachable" />
         <specialization name="turnOnVehicle" />
@@ -49,7 +54,7 @@
         <specialization name="mountable" />
         <specialization name="siloBaler" />
         <specialization name="hide" />
-    </type>
+    </type-->
     </vehicleTypes>
 
     <storeItems>
@@ -71,7 +76,7 @@
             <brand>AMAZONE</brand>
             <category>baling</category>
         </storeItem>
-        <storeItem>
+        <!--storeItem>
             <name>Pantera 4502 HP</name>
             <specs>
                 <fillTypes>wheat_windrow dryGrass_windrow chaff</fillTypes>
@@ -87,7 +92,7 @@
             <rotation>0</rotation>
             <brand>AMAZONE</brand>
             <category>baling</category>
-        </storeItem>
+        </storeItem-->
     </storeItems>
 	<l10n>
 		<text name="agp8x_workstate0">

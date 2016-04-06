@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<fermentingBales defaultTicks="1000">
+	<bale fillType="chaff" target="silage" ticks="3000" />
+	<!--bale fillType="silage" target="manure" ticks="300000" /-->
+</fermentingBales>

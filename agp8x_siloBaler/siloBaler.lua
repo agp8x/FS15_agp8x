@@ -15,33 +15,11 @@ function SiloBaler:load(xmlFile)
 	self.switchWorkstate = SiloBaler.switchWorkstate;
 	self.setPickupState = SiloBaler.setPickupState;
 	self.allowPickingUp = SiloBaler.allowPickingUp;
+	self.workstateDirty = self:getNextDirtyFlag();
 	
 	self.pickup = Utils.indexToObject(self.components,getXMLString(xmlFile,"vehicle.siloBaler#pickupIndex"));
 	local state = Utils.getNoNil(getXMLBool(xmlFile, "vehicle.siloBaler#initialSilobaling"), true);
 	self:switchWorkstate(state);
-	self.workstateDirty = self:getNextDirtyFlag();
-	
-	local i=0;
-	while true do
-		local key = string.format("vehicle.siloBaler.bale(%d)", i);
-		if not hasXMLProperty(xmlFile, key) then
-            break;
-        end;
-		local fillType = getXMLString(xmlFile, key.."#fillType");
-		local filename = getXMLString(xmlFile, key.."#filename");
-		if fillType ~= nil and filename ~= nil then
-			local isRoundBale = Utils.getNoNil(getXMLBool(xmlFile, key.."#isRoundBale"), false);
-			local width = Utils.round(Utils.getNoNil(getXMLFloat(xmlFile, key.."#width"), 1.2), 2);
-			local height = Utils.round(Utils.getNoNil(getXMLFloat(xmlFile, key.."#height"), 0.9), 2);
-			local length = Utils.round(Utils.getNoNil(getXMLFloat(xmlFile, key.."#length"), 2.4), 2);
-			local diameter = Utils.round(Utils.getNoNil(getXMLFloat(xmlFile, key.."#diameter"), 1.8), 2);
-			local key = BaleUtil.getBaleKey(fillType, width, height, length, diameter, isRoundbale);
-			if BaleUtil[key] == nil then
-				BaleUtil.registerBaleType(filename, fillType, width, height, length, diameter, isRoundbale);
-			end;
-		end;
-		i = i + 1;
-		end;
 end;
 function SiloBaler:delete()
 end;
@@ -98,22 +76,23 @@ function SiloBaler:draw()
     end;
 end;
 function SiloBaler:onTurnedOn(noEventSend)
-	if not self.siloBaling then
-		self.allowFillFromAir = false;
+	if self.siloBaling then
+		self.allowFillFromAir = true;
 	end;
 end;
 function SiloBaler:onTurnedOff(noEventSend)
+	self.allowFillFromAir = false;
 end;
 function SiloBaler:switchWorkstate(newState)
 	if newState ~= self.siloBaling and not self:getIsTurnedOn() then
+		self.siloBaling = newState;
+		self.fillableBalerActive = newState;
+		setVisibility(self.pickup, not newState);
 		if newState then
 			self:setPickupState(false);
-			self.siloBaling = true;
-			setVisibility(self.pickup, false);
 			self.lastFillLevel = self.fillLevel;
 		else
-			self.siloBaling = false;
-			setVisibility(self.pickup, true);
+			self.allowFillFromAir = false;
 		end;
 	end;
 end;

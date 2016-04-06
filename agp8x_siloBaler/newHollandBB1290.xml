@@ -161,7 +161,6 @@
 
     <schemaOverlay file="$dataS2/menu/schemas/implementSchema.png" fileSelected="$dataS2/menu/schemas/implementSchemaSelected.png" fileTurnedOn="$dataS2/menu/schemas/implementSchemaTurnedOn.png" fileSelectedTurnedOn="$dataS2/menu/schemas/implementSchemaSelectedTurnedOn.png" width="0.5" height="0.5" attacherJointPosition="0 0"/>
 	
-	<siloBaler pickupIndex="0>5" initialSilobaling="false">
-        <bale fillType="chaff" filename="baleChaff240.i3d" isRoundBale="false"  width="1.2" height="0.9" length="2.4" />
-	</siloBaler>
+	<fillableBaler active="false" throughput="10" />
+	<siloBaler pickupIndex="0>5" initialSilobaling="false" />
 </vehicle>

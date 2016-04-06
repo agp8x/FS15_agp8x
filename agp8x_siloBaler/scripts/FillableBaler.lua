@@ -12,6 +12,9 @@ function FillableBaler.prerequisitesPresent(specializations)
     return SpecializationUtil.hasSpecialization(Baler, specializations);
 end;
 function FillableBaler:load(xmlFile)
+	self.fillableBalerActive = Utils.getNoNil(getXMLBool(xmlFile, "vehicle.fillableBaler#active", true));
+	self.fibaThroughput = Utils.getNoNil(getXMLInt(xmlFile, "vehicle.fillableBaler#throughput"), 1);
+	--print("FIBA-t: ", self.fibaThroughput);
 end;
 function FillableBaler:delete()
 end;
@@ -22,16 +25,16 @@ end;
 function FillableBaler:update(dt)
 end;
 function FillableBaler:updateTick(dt)
-    if self:getIsActive() and self.isTurnedOn and self.isServer then
-		if self.allowFillFromAir then
-			if self.baleUnloadAnimationName == nil and self.fillLevel-self.lastFillLevel>0 then
+    if self:getIsActive() and self:getIsTurnedOn() and self.isServer then
+		if self.fillableBalerActive then
+			if self.baleUnloadAnimationName == nil and (self.fillLevel - self.lastFillLevel > 0) then
 				-- move all bales
-				local deltaTime = self:getTimeFromLevel(self.fillLevel-self.lastFillLevel);
+				local deltaTime = self:getTimeFromLevel(self.fillLevel - self.lastFillLevel);
 				self:moveBales(deltaTime);
 			end;
-			self.lastFillLevel=self.fillLevel;
+			self.lastFillLevel = self.fillLevel;
 			if self.fillLevel >= self.capacity then
-				local usedFillType=self.currentFillType;
+				local usedFillType = self.currentFillType;
 				if self.baleTypes ~= nil then
 					if self.baleAnimCurve ~= nil then
 						local restDeltaFillLevel = 0;
@@ -52,10 +55,4 @@ function FillableBaler:updateTick(dt)
 	end;
 end;
 function FillableBaler:draw()
-end;
-function FillableBaler:onTurnedOn(noEventSend)
-	self.allowFillFromAir = true;
-end;
-function FillableBaler:onTurnedOff(noEventSend)
-	self.allowFillFromAir = false;
 end;

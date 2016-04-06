@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <extraBales>
-	<bale fillType="chaff" filename="baleChaff240.i3d" isRoundBale="false"  width="1.2" height="0.9" length="2.4" />
+	<bale fillType="chaff" filename="bale/baleChaff240.i3d" isRoundBale="false"  width="1.2" height="0.9" length="2.4" />
 </extraBales>

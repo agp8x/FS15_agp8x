@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<i3D name="baleHay240" version="1.6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://i3d.giants.ch/schema/i3d-1.6.xsd">
+  <Asset>
+    <Export program="GIANTS Editor 64bit" version="6.0.5"/>
+  </Asset>
+
+  <Files>
+    <File fileId="2" filename="baleHay240_diffuse.png" relativePath="true"/>
+    <File fileId="3" filename="baleStraw240_normal.png" relativePath="true"/>
+    <File fileId="4" filename="shadowDisableShader.xml" relativePath="true"/>
+  </Files>
+
+
+  <Materials>
+    <Material name="lambert1" materialId="6" diffuseColor="0.498039 0.498039 0.498039 1" ambientColor="1 1 1">
+    </Material>
+    <Material name="baleHay240_mat" materialId="8" ambientColor="1 1 1" customShaderId="4">
+      <Texture fileId="2"/>
+      <Normalmap fileId="3"/>
+    </Material>
+    <Material name="baleHay240_mat1" materialId="9" ambientColor="1 1 1">
+      <Texture fileId="2"/>
+    </Material>
+  </Materials>
+
+
+  <Shapes externalShapesFile="baleChaff240.i3d.shapes">
+  </Shapes>
+
+
+  <Dynamics>
+  </Dynamics>
+
+  <Scene>
+    <Shape shapeId="1" name="baleHay240" translation="8.28536e-009 0 -5.35671e-008" dynamic="true" compound="true" collisionMask="16781314" staticFriction="1.3" dynamicFriction="1.3" density="0.2" clipDistance="250" nodeId="31" materialIds="6" castsShadows="true" receiveShadows="true" nonRenderable="true">
+      <Shape shapeId="2" name="haybaleAttacherTrigger" translation="-8.28536e-009 0 5.35671e-008" kinematic="true" trigger="true" collisionMask="8192" nodeId="32" materialIds="6" castsShadows="true" receiveShadows="true" nonRenderable="true"/>
+      <TransformGroup name="baleHay240_vis" translation="-8.28536e-009 0 5.35671e-008" nodeId="33" lodDistance="0 40">
+        <Shape shapeId="3" name="lod1" nodeId="34" materialIds="8" castsShadows="true" receiveShadows="true"/>
+        <Shape shapeId="4" name="lod2" nodeId="35" materialIds="9" castsShadows="true" receiveShadows="true"/>
+      </TransformGroup>
+      <Shape shapeId="5" name="haybaleBaler_col1" translation="0.527513 -0.342262 -3.89287e-008" compoundChild="true" collisionMask="134217728" staticFriction="0.9" dynamicFriction="0.9" density="0.01" nodeId="36" materialIds="6" castsShadows="true" receiveShadows="true" nonRenderable="true"/>
+      <Shape shapeId="6" name="haybaleBaler_col2" translation="-0.527879 -0.342262 -3.89287e-008" compoundChild="true" collisionMask="134217728" staticFriction="0.9" dynamicFriction="0.9" density="0.01" nodeId="37" materialIds="6" castsShadows="true" receiveShadows="true" nonRenderable="true"/>
+      <Shape shapeId="7" name="haybaleBaler_col3" translation="-0.527879 0.33962 -3.89287e-008" compoundChild="true" collisionMask="134217728" staticFriction="0.9" dynamicFriction="0.9" density="0.01" nodeId="38" materialIds="6" castsShadows="true" receiveShadows="true" nonRenderable="true"/>
+      <Shape shapeId="8" name="haybaleBaler_col4" translation="1.24345e-016 0 -1.11726" compoundChild="true" collisionMask="134217728" staticFriction="0.9" dynamicFriction="0.9" density="0.01" nodeId="39" materialIds="6" castsShadows="true" receiveShadows="true" nonRenderable="true"/>
+      <Shape shapeId="9" name="haybaleBaler_col5" translation="0 0 1.11726" compoundChild="true" collisionMask="134217728" staticFriction="0.9" dynamicFriction="0.9" density="0.01" nodeId="40" materialIds="6" castsShadows="true" receiveShadows="true" nonRenderable="true"/>
+      <Shape shapeId="10" name="haybaleBaler_col6" translation="-8.28536e-009 0 5.35671e-008" compoundChild="true" collisionMask="134217728" staticFriction="0.9" dynamicFriction="0.9" density="0.01" nodeId="41" materialIds="6" castsShadows="true" receiveShadows="true" nonRenderable="true"/>
+    </Shape>
+  </Scene>
+
+  <UserAttributes>
+    <UserAttribute nodeId="31">
+      <Attribute name="baleMeshIndex" type="string" value="1"/>
+      <Attribute name="dynamicMountForceLimitScale" type="float" value="2"/>
+      <Attribute name="dynamicMountTriggerIndex" type="string" value="0"/>
+      <Attribute name="fillType" type="string" value="chaff"/>
+      <Attribute name="isFermentingBale" type="boolean" value="true"/>
+    </UserAttribute>
+  </UserAttributes>
+
+</i3D>

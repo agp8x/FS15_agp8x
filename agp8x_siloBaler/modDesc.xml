@@ -10,17 +10,18 @@
         <en>siloBaler</en>
         <de>siloBaler</de>
     </description>
-    <iconFilename>store_kroneBigPack1290.png</iconFilename>
+    <iconFilename>store_kroneBigPack1290.png</iconFilename><!--TODO-->
     <multiplayer supported="true"/>
 	<extraSourceFiles>
-        <sourceFile filename="nonWindrowingBales.lua" />
-        <sourceFile filename="fermentingBales.lua" />
+        <sourceFile filename="scripts/nonWindrowingBales.lua" />
+        <sourceFile filename="scripts/fermentingBales.lua" />
+        <!--sourceFile filename="scripts/extendStrawBlower.lua" /-->
     </extraSourceFiles>
 
     <specializations>
-        <specialization name="siloBaler" className="SiloBaler" filename="siloBaler.lua" />
-        <specialization name="FillableBaler" className="FillableBaler" filename="FillableBaler.lua" />
-        <specialization name="hide" className="Hider" filename="hide.lua" />
+        <specialization name="siloBaler" className="SiloBaler" filename="scripts/siloBaler.lua" />
+        <specialization name="FillableBaler" className="FillableBaler" filename="scripts/FillableBaler.lua" />
+        <!--specialization name="hide" className="Hider" filename="scripts/hide.lua" /-->
     </specializations>
 
     <vehicleTypes>
@@ -59,24 +60,27 @@
     </vehicleTypes>
 
     <storeItems>
-        <storeItem>
-            <name>Pantera 4502</name>
-            <specs>
-                <fillTypes>fertilizer</fillTypes>
-                <workingWidth>41.0</workingWidth>
-                <capacity unit="$l10n_unit_liter">4500</capacity>
-            </specs>
-            <functions>
-                <function>$l10n_function_sprayer</function>
-            </functions>
-            <image active="store_kroneBigPack1290.png" brand="$data/vehicles/store/brand_newholland.png"/>
-            <price>240</price>
-            <dailyUpkeep>310</dailyUpkeep>
-            <xmlFilename>newHollandBB1290.xml</xmlFilename>
-            <rotation>0</rotation>
-            <brand>AMAZONE</brand>
-            <category>baling</category>
-        </storeItem>
+		<storeItem>
+			<name>BigBaler 1290</name>
+			<specs>
+				<fillTypes>dryGrass_windrow wheat_windrow</fillTypes>
+				<neededPower>122</neededPower>
+			</specs>
+			<functions>
+				<function>$l10n_function_baler</function>
+				<function>
+					<en>Switchable to silobaler</en>
+					<de>Umschaltbar auf Silopresse</de>
+				</function>
+			</functions>
+			<image active="$data/vehicles/store/store_newHollandBB1290.png" brand="$data/vehicles/store/brand_newholland.png"/>
+			<price>186000</price>
+			<dailyUpkeep>150</dailyUpkeep>
+			<xmlFilename>vehicles/newHollandBB1290.xml</xmlFilename>
+			<rotation>0</rotation>
+			<brand>New Holland</brand>
+			<category>baling</category>
+		</storeItem>
         <!--storeItem>
             <name>Pantera 4502 HP</name>
             <specs>
@@ -94,23 +98,48 @@
             <brand>AMAZONE</brand>
             <category>baling</category>
         </storeItem-->
+    <storeItem>
+        <name>Primor 3570</name>
+        <specs>
+            <fillTypes>wheat_windrow chaff silage</fillTypes>
+            <neededPower>70</neededPower>
+        </specs>
+        <functions>
+            <function>$l10n_function_feederBale</function>
+        </functions>
+        <image active="$data/vehicles/store/store_kuhnPrimor3570.png" brand="$data/vehicles/store/brand_kuhn.png"/>
+        <price>19000</price>
+        <dailyUpkeep>20</dailyUpkeep>
+        <xmlFilename>vehicles/kuhnPrimor3570.xml</xmlFilename>
+        <rotation>0</rotation>
+        <brand>Kuhn</brand>
+        <category>feeding</category>
+    </storeItem>
     </storeItems>
 	<l10n>
 		<text name="agp8x_workstate0">
+			<en>Silo baling</en>
 			<de>Siloballen</de>
-			<en>Silo balls</en>
 		</text>
 		<text name="agp8x_workstate1">
+			<en>Straw/grass bales</en>
 			<de>Stroh-/Heu-ballen</de>
-			<en>Straw/Grass balls</en>
 		</text>
 		<text name="agp8x_change_workstate">
+			<en>Switch press mode</en>
 			<de>Presse umschalten</de>
-			<en>Switch press</en>
 		</text>
 		<text name="agp8x_workstate">
+			<en>press mode:</en>
 			<de>Pressmodus:</de>
-			<en>press setting:</en>
+		</text>
+		<text name="agp8x_ferment">
+			<en>%s to %s: %s</en>
+			<!--de>%s zu %s: %s</de-->
+		</text>
+		<text name="agp8x_ferment_done">
+			<en>done</en>
+			<!--de>fertig</de-->
 		</text>
 	</l10n>
 </modDesc>

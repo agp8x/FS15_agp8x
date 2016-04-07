@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<fermentingBales defaultTicks="1536000">
-	<!-- 1536000 ticks should turn out to roughly one realtime hour (640*~40 dt)-->
+<fermentingBales defaultTicks="3600000">
+	<!-- 3600000: 1000 ms * 60 s * 60 m -->
 	<bale fillType="chaff" target="silage" />
-	<!--bale fillType="silage" target="manure" ticks="300000" /-->
+	<!--bale fillType="silage" target="manure" ticks="75600000" /-->
 </fermentingBales>

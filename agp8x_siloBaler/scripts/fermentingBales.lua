@@ -5,6 +5,7 @@
 -- @date  06.04.16
 --
 -- bales mounted by a baleLoader are resetted on loading, because GIANTS rather has redundant code to save bales rather than calling Bale.getSaveAttributesAndNodes() when saving a baleLoader
+
 FermentingBale = {textSize=0.05}
 
 function FermentingBale:setNodeId(nodeId)
@@ -23,7 +24,9 @@ function FermentingBale:setNodeId(nodeId)
 	end;
 end;
 function FermentingBale:update(dt)
-	--TODO: renderText()
+	--[[if self.isClient and g_currentMission.controlledVehicle == nil then
+	
+		if g_gui.currentGui == nil ]]
 	if not self.fermentingTarget then
 		return;
 	end;
@@ -41,7 +44,7 @@ function FermentingBale:update(dt)
 		local target = Fillable.fillTypeIndexToDesc[self.fermentingTarget].nameI18N;
 		local progress;
 		if self.fermentingDuration then
-			progress = string.format("%i%%", (self.fermentingDuration / self.fermentingMax) * 100);
+			progress = string.format("%i%%", (1 - (self.fermentingDuration / self.fermentingMax)) * 100);
 		else
 			progress = g_i18n:getText("agp8x_ferment_done");
 		end;

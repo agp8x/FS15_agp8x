@@ -66,12 +66,11 @@ end;
 function SiloBaler:draw()
     if self.isClient then
         if self:getIsActiveForInput(true) and not self:getIsTurnedOn() then
-			g_currentMission:addHelpButtonText(g_i18n:getText("agp8x_change_workstate"), InputBinding.IMPLEMENT_EXTRA3);
 			local i = 0;
 			if not self.siloBaling then
 				i = 1;
 			end;
-			g_currentMission:addExtraPrintText(g_i18n:getText("agp8x_workstate").."  "..g_i18n:getText("agp8x_workstate"..i));
+			g_currentMission:addHelpButtonText(g_i18n:getText("agp8x_change_workstate")..": "..g_i18n:getText("agp8x_workstate"..i), InputBinding.IMPLEMENT_EXTRA3);
         end
     end;
 end;

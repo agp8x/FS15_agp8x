@@ -4,53 +4,65 @@
 -- @author  agp8x <ls@agp8x.org>
 -- @date  06.04.16
 --
--- bales mounted by a baleLoader are resetted on loading, because GIANTS rather has redundant code to save bales rather than calling Bale.getSaveAttributesAndNodes() when saving a baleLoader
+-- Bales mounted by a baleLoader are resetted on loading, because GIANTS rather has redundant code to save bales rather than calling Bale.getSaveAttributesAndNodes() when saving a BaleLoader.
+--
+-- To add other fermenting bales: load a .lua appending the table BaleUtil.fermentingBales just like lines 1-1 below.
+-- Fermenting bales objects (i3d file) need to have an "isFermentingBale" User Attribute as flag.
 
-FermentingBale = {textSize=0.05}
+FermentingBale = {textSize=0.05, radius=5}
 
 function FermentingBale:setNodeId(nodeId)
-	local isFermenting = getUserAttribute(nodeId, "isFermentingBale");
-	if isFermenting then
+	if not self.isfermenting then
+		self.isFermenting = getUserAttribute(nodeId, "isFermentingBale");
+	end;
+	if self.isFermenting then
 		for _, bale in pairs(BaleUtil.fermentingBales) do
-			if bale.fillType == self.fillType then
+			local hasLoadedFermentation = self.loadedFillType and (bale.fillType == self.loadedFillType);
+			if bale.fillType == self.fillType or hasLoadedFermentation then
 				self.fermentingTarget = bale.target;
 				self.fermentingMax = bale.ticks;
-				if not self.fermentingLoaded then
-					self.fermentingDuration = bale.ticks;
+				if hasLoadedFermentation then
+					self.fillType = self.loadedFillType;
+					self.loadedFillType = false;
+					break;
 				end;
-				break;
+				if not (self.fermentingLoaded or hasLoadedFermentation) then
+					self.fermentingDuration = bale.ticks;
+					break;
+				end;
 			end;
+		end;
+		if self.loadedFillType then
+			self.fillType = self.loadedFillType;
+			self.fermentingDuration = nil;
+			self.fermentingLoaded = false;
 		end;
 	end;
 end;
 function FermentingBale:update(dt)
-	--[[if self.isClient and g_currentMission.controlledVehicle == nil then
-	
-		if g_gui.currentGui == nil ]]
 	if not self.fermentingTarget then
 		return;
 	end;
-	if g_currentMission:getIsClient() then
-		local radius = 5;
+	if g_currentMission:getIsClient() and g_currentMission.controlledVehicle == nil and g_gui.currentGui == nil then
 		local x,y,z = getWorldTranslation(g_currentMission.player.rootNode);
 		local bx,by,bz = getWorldTranslation(self.nodeId);
 		
 		local distance = FermentingBale.euclideanDistance(x,y,z, bx,by,bz);
-		if distance > radius then
+		if distance > FermentingBale.radius then
 			return;
 		end;
 		local sx,sy,sz = project(bx,by,bz);
 		local fillType = Fillable.fillTypeIndexToDesc[self.fillType].nameI18N;
 		local target = Fillable.fillTypeIndexToDesc[self.fermentingTarget].nameI18N;
-		local progress;
+		local text = "";
 		if self.fermentingDuration then
-			progress = string.format("%i%%", (1 - (self.fermentingDuration / self.fermentingMax)) * 100);
+			local progress = string.format("%i%%", (1 - (self.fermentingDuration / self.fermentingMax)) * 100);
+			text = string.format(g_i18n:getText("agp8x_ferment"), fillType, target, progress);
 		else
-			progress = g_i18n:getText("agp8x_ferment_done");
+			text = string.format(g_i18n:getText("agp8x_ferment_done"), fillType);
 		end;
 		setTextColor(0,0,0,1);
 		setTextBold(true);
-		local text = string.format(g_i18n:getText("agp8x_ferment"), fillType, target, progress);
 		local width = getTextWidth(FermentingBale.textSize, text);
 		local height = getTextHeight(FermentingBale.textSize, text);
 		renderText(sx-(height/2), sy-(width/2), FermentingBale.textSize, text);
@@ -63,26 +75,46 @@ function FermentingBale:updateTick(dt)
 			self.fillType = self.fermentingTarget;
 			self.fermentingDuration = nil;
 			self.fermentingLoaded = false;
+			FermentingBale.setNodeId(self, self.nodeId);
 		end;
 	end;
 end;
 function FermentingBale:getSaveAttributesAndNodes(nodeIdent, superFunc)
 	local attributes, nodes = superFunc(self, nodeIdent);
-	if self.fermentingTarget then
-		attributes = attributes..' fermentingDuration="'..tostring(self.fermentingDuration)..'"'
+	if self.isFermenting then
+		attributes = attributes..' fermentingBale="true" fermentingDuration="'..tostring(self.fermentingDuration)..'" fillType="'..tostring(Fillable.fillTypeIndexToDesc[self.fillType].name)..'"';
 	end;
 	return attributes, nodes;
 end;
 function FermentingBale:loadFromAttributesAndNodes(xmlFile, key, resetVehicles, superFunc)
-	local fermentingDuration = getXMLString(xmlFile, key.."#fermentingDuration");
-	if fermentingDuration then
+	local isFermenting = Utils.getNoNil(getXMLBool(xmlFile, key.."#fermentingBale"), false);
+	if isFermenting then
 		self.fermentingLoaded = true;
 		self.fermentingDuration = getXMLInt(xmlFile, key.."#fermentingDuration");
+		local fillTypeName = getXMLString(xmlFile, key.."#fillType");
+		self.fillType = Fillable.fillTypeNameToInt[fillTypeName];
+		self.loadedFillType = self.fillType;
 	end;
 	return superFunc and superFunc(self, xmlFile, key, resetVehicles) or BaseMission.VEHICLE_LOAD_OK;
 end;
 function FermentingBale.euclideanDistance(x0,y0,z0, x1,y1,z1)
 	return math.sqrt((x1-x0)^2 + (y1-y0)^2 + (z1-z0)^2)
+end;
+function FermentingBale:readStream(streamId, connection)
+	if self.isFermenting then
+		self.fermentingTarget = streamReadInt8(streamId);
+		self.fillType = streamReadInt8(streamId);
+		self.fermentingMax = streamReadFloat32(streamId);
+		self.fermentingDuration = streamReadFloat32(streamId);
+	end;
+end;
+function FermentingBale:writeStream(streamId, connection)
+	if self.isFermenting then
+		streamWriteInt8(streamId, self.fermentingTarget);
+		streamWriteInt8(streamId, self.fillType);
+		streamWriteFloat32(streamId, self.fermentingMax);
+		streamWriteFloat32(streamId, self.fermentingDuration);
+	end;
 end;
 
 if not BaleUtil.fermentingBales ~= nil then
@@ -121,4 +153,6 @@ if not BaleUtil.fermentingBales ~= nil then
 	Bale.loadFromAttributesAndNodes = function(self, xmlFile, key, resetVehicles)
 		return FermentingBale.loadFromAttributesAndNodes(self, xmlFile, key, resetVehicles, baleLoadFromAttributesAndNodes);
 	end;
+	Bale.readStream = Utils.appendedFunction(Bale.readStream, FermentingBale.readStream);
+	Bale.writeStream = Utils.appendedFunction(Bale.writeStream, FermentingBale.writeStream);
 end;

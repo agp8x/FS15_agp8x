@@ -1,27 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<modDesc descVersion="22">
+<modDesc descVersion="23">
     <author>agp8x</author>
-    <version>0.9</version>
+    <version>1.0</version>
     <title>
-        <en>siloBaler</en>
-        <de>siloBaler</de>
+        <en>Silobaler</en>
+        <de>Silopresse</de>
     </title>
     <description>
-        <en>siloBaler</en>
-        <de>siloBaler</de>
+        <en><![CDATA[During some long winters, a farmer has modified his New Holland BB 1290 baler to be catch the stream of a forage harvester directly and baling it into bags. With just a few adjustements, the baler is still able to process straw and hay. Although his customers value the high quality of these silage bales, some bales were rotten after being forgotten for too long, so he supplied them with a specially hardended version of the Kuhn Primor 3570 not only to spread rotten bales on a manure heap, but also to distribute the heavy silage bales into the feeding lot, or fresh, unfermented bales into a drive-through silo.
+On delivery, the baler is fitted for usual straw/hay baling for easier transport of the pickup and can be reconfigured by the customer for silobaling.]]></en>
+        <de><![CDATA[In einigen langen Wintern hat ein kleines fränkisches Lohnunternehmen seine New Holland BB 1290 Ballenpresse umgebaut, um damit nicht nur Stroh und Heu , sondern auch Silage direkt aus einem Feldhäcklser in Silobags pressen zu können. Obwohl die Kunden die hohen Qualität solcher Siloballen schätzen, wurden doch immer wieder einige vergessen, die dann zu schlecht zu verfüttern wurden. Dafür liefert das Unternehmen speziell verstärkte Ballenauflöser vom Typ Kuhn Primor 3570 aus, die mit solchen schweren Ballen zurecht kommen. Diese werden nicht nur zum Auflösen von verrotteten Ballen auf dem Misthaufen verwendet, sondern werden auch zum Verteilen von Silageballen auf dem Futtertisch und von unvergärten Ballen auf dem Fahrsilo geschätzt.
+Um die Lieferlogistik zu vereinfachen, ist diese Presse im Auslieferungszustand für die "klassische" Heu- und Strohbergung ausgerüstet und kann durch den Kunden für Siloballen umgerüstet werden.]]></de>
     </description>
-    <iconFilename>store_kroneBigPack1290.png</iconFilename><!--TODO-->
+    <iconFilename>store_newHollandBB1290.png</iconFilename>
     <multiplayer supported="true"/>
 	<extraSourceFiles>
         <sourceFile filename="scripts/nonWindrowingBales.lua" />
         <sourceFile filename="scripts/fermentingBales.lua" />
-        <!--sourceFile filename="scripts/extendStrawBlower.lua" /-->
     </extraSourceFiles>
 
     <specializations>
         <specialization name="siloBaler" className="SiloBaler" filename="scripts/siloBaler.lua" />
         <specialization name="FillableBaler" className="FillableBaler" filename="scripts/FillableBaler.lua" />
-        <!--specialization name="hide" className="Hider" filename="scripts/hide.lua" /-->
     </specializations>
 
     <vehicleTypes>
@@ -41,29 +41,13 @@
         <specialization name="FillableBaler" />
         <specialization name="siloBaler" />
     </type>
-        <!--type name="siloBaler_hardpoint" className="Vehicle" filename="$dataS/scripts/vehicles/Vehicle.lua">
-        <specialization name="workArea" />
-        <specialization name="attachable" />
-        <specialization name="turnOnVehicle" />
-        <specialization name="animatedVehicle" />
-        <specialization name="cylindered" />
-        <specialization name="foldable" />
-        <specialization name="fillable" />
-        <specialization name="pickup" />
-        <specialization name="baler" />
-        <specialization name="powerConsumer" />
-        <specialization name="washable" />
-        <specialization name="mountable" />
-        <specialization name="siloBaler" />
-        <specialization name="hide" />
-    </type-->
     </vehicleTypes>
 
     <storeItems>
 		<storeItem>
 			<name>BigBaler 1290</name>
 			<specs>
-				<fillTypes>dryGrass_windrow wheat_windrow</fillTypes>
+				<fillTypes>dryGrass_windrow wheat_windrow chaff</fillTypes>
 				<neededPower>122</neededPower>
 			</specs>
 			<functions>
@@ -81,27 +65,10 @@
 			<brand>New Holland</brand>
 			<category>baling</category>
 		</storeItem>
-        <!--storeItem>
-            <name>Pantera 4502 HP</name>
-            <specs>
-                <fillTypes>wheat_windrow dryGrass_windrow chaff</fillTypes>
-                <capacity unit="$l10n_unit_liter">400</capacity>
-            </specs>
-            <functions>
-                <function>$l10n_function_baler</function>
-            </functions>
-            <image active="store_kroneBigPack1290.png" brand="$data/vehicles/store/brand_newholland.png"/>
-            <price>24</price>
-            <dailyUpkeep>310</dailyUpkeep>
-            <xmlFilename>newHollandBB1290_hp.xml</xmlFilename>
-            <rotation>0</rotation>
-            <brand>AMAZONE</brand>
-            <category>baling</category>
-        </storeItem-->
     <storeItem>
         <name>Primor 3570</name>
         <specs>
-            <fillTypes>wheat_windrow chaff silage</fillTypes>
+            <fillTypes>wheat_windrow chaff silage manure</fillTypes>
             <neededPower>70</neededPower>
         </specs>
         <functions>
@@ -122,24 +89,20 @@
 			<de>Siloballen</de>
 		</text>
 		<text name="agp8x_workstate1">
-			<en>Straw/grass bales</en>
+			<en>Straw/hay bales</en>
 			<de>Stroh-/Heu-ballen</de>
 		</text>
 		<text name="agp8x_change_workstate">
 			<en>Switch press mode</en>
 			<de>Presse umschalten</de>
 		</text>
-		<text name="agp8x_workstate">
-			<en>press mode:</en>
-			<de>Pressmodus:</de>
-		</text>
 		<text name="agp8x_ferment">
 			<en>%s to %s: %s</en>
 			<!--de>%s zu %s: %s</de-->
 		</text>
 		<text name="agp8x_ferment_done">
-			<en>done</en>
-			<!--de>fertig</de-->
+			<en>Fermented to %s</en>
+			<!--de>Zu %s geworden</de-->
 		</text>
 	</l10n>
 </modDesc>

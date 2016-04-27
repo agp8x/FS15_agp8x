@@ -68,6 +68,7 @@
 				<!--rot 0 0 30 would be nice, tipEffect prevents it, though-->
                 <dischargeParticleSystem type="chaff" node="0>9|0|0|0|1" psRootNode="0|0" position="0 0 0" rotation="0 0 0" file="discharge/kuhnPrimor3570ParticlesChaff.i3d" />
                 <dischargeParticleSystem type="silage" node="0>9|0|0|0|1" psRootNode="0|0" position="0 0 0" rotation="0 0 0" file="discharge/kuhnPrimor3570ParticlesSilage.i3d" />
+                <dischargeParticleSystem type="manure" node="0>9|0|0|0|1" psRootNode="0|0" position="0 0 0" rotation="0 0 0" file="discharge/kuhnPrimor3570ParticlesManure.i3d" />
             </dischargeParticleSystems>
             <tipEffect>
                 <effectNode node="0|0|0" linkNode="0>9|0|0|0|1" position="0 0 0" filename="$data/vehicles/particleAnimations/kuhn/kuhnPrimor3570.i3d" fadeTime="0.5"/>
@@ -79,7 +80,7 @@
         <tipRotationNode index="0>12" rotSpeed="-250" type="trailer" rotAxis="1" turnOnFadeTime="1" turnOffFadeTime="1"/>
     </tipRotationNodes>
 
-    <fillTypes fillTypes="wheat_windrow barley_windrow chaff silage" />
+    <fillTypes fillTypes="wheat_windrow barley_windrow chaff silage manure" />
 
     <support animationName="moveSupport" />
 

@@ -13,8 +13,6 @@ function FillableBaler.prerequisitesPresent(specializations)
 end;
 function FillableBaler:load(xmlFile)
 	self.fillableBalerActive = Utils.getNoNil(getXMLBool(xmlFile, "vehicle.fillableBaler#active", true));
-	self.fibaThroughput = Utils.getNoNil(getXMLInt(xmlFile, "vehicle.fillableBaler#throughput"), 1);
-	--print("FIBA-t: ", self.fibaThroughput);
 end;
 function FillableBaler:delete()
 end;

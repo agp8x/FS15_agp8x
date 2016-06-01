@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<fermentingBales defaultTicks="3600000">
+<fermentingBales defaultTicks="7200000">
 	<!-- 3600000: 1000 ms * 60 s * 60 m => 1 hour -->
 	<bale fillType="chaff" target="silage" />
 	<bale fillType="silage" target="manure" ticks="604800000" />

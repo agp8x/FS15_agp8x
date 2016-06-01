@@ -2,8 +2,8 @@
 <vehicle type="siloBaler">
     <annotation>Copyright (C) GIANTS Software GmbH, All Rights Reserved.</annotation>
     <name>
-        <en>New Holland BigBaler 1290</en>
-        <de>New Holland BigBaler 1290</de>
+        <en>New Holland SiloBaler 1290</en>
+        <de>New Holland SiloBaler 1290</de>
     </name>
     <typeDesc>$l10n_TypeDesc_Baler</typeDesc>
     <filename>$data/vehicles/balers/newHolland/newHollandBB1290.i3d</filename>
@@ -62,7 +62,6 @@
 
     <inputAttacherJoints>
         <inputAttacherJoint index="6" jointType="trailerLow" indexPTO="0>13" />
-        <inputAttacherJoint index="6" jointType="trailer" indexPTO="0>13" />
     </inputAttacherJoints>
 
     <baleTypes>

@@ -12,7 +12,7 @@ On delivery, the baler is fitted for usual straw/hay baling for easier transport
         <de><![CDATA[In einigen langen Wintern hat ein kleines fränkisches Lohnunternehmen seine New Holland BB 1290 Ballenpresse umgebaut, um damit nicht nur Stroh und Heu , sondern auch Silage direkt aus einem Feldhäcklser in Silobags pressen zu können. Obwohl die Kunden die hohen Qualität solcher Siloballen schätzen, wurden doch immer wieder einige vergessen, die dann zu schlecht zu verfüttern wurden. Dafür liefert das Unternehmen speziell verstärkte Ballenauflöser vom Typ Kuhn Primor 3570 aus, die mit solchen schweren Ballen zurecht kommen. Diese werden nicht nur zum Auflösen von verrotteten Ballen auf dem Misthaufen verwendet, sondern werden auch zum Verteilen von Silageballen auf dem Futtertisch und von unvergärten Ballen auf dem Fahrsilo geschätzt.
 Um die Lieferlogistik zu vereinfachen, ist diese Presse im Auslieferungszustand für die "klassische" Heu- und Strohbergung ausgerüstet und kann durch den Kunden für Siloballen umgerüstet werden.]]></de>
     </description>
-    <iconFilename>store_newHollandBB1290.png</iconFilename>
+    <iconFilename>siloBaler.png</iconFilename>
     <multiplayer supported="true"/>
 	<extraSourceFiles>
         <sourceFile filename="scripts/nonWindrowingBales.lua" />
@@ -45,10 +45,10 @@ Um die Lieferlogistik zu vereinfachen, ist diese Presse im Auslieferungszustand 
 
     <storeItems>
 		<storeItem>
-			<name>BigBaler 1290</name>
+			<name>SiloBaler 1290</name>
 			<specs>
 				<fillTypes>dryGrass_windrow wheat_windrow chaff</fillTypes>
-				<neededPower>122</neededPower>
+				<neededPower>130</neededPower>
 			</specs>
 			<functions>
 				<function>$l10n_function_baler</function>
@@ -58,25 +58,29 @@ Um die Lieferlogistik zu vereinfachen, ist diese Presse im Auslieferungszustand 
 				</function>
 			</functions>
 			<image active="$data/vehicles/store/store_newHollandBB1290.png" brand="$data/vehicles/store/brand_newholland.png"/>
-			<price>186000</price>
-			<dailyUpkeep>150</dailyUpkeep>
+			<price>190000</price>
+			<dailyUpkeep>175</dailyUpkeep>
 			<xmlFilename>vehicles/newHollandBB1290.xml</xmlFilename>
 			<rotation>0</rotation>
 			<brand>New Holland</brand>
 			<category>baling</category>
 		</storeItem>
     <storeItem>
-        <name>Primor 3570</name>
+        <name>Primor 3570 HD</name>
         <specs>
             <fillTypes>wheat_windrow chaff silage manure</fillTypes>
-            <neededPower>70</neededPower>
+            <neededPower>80</neededPower>
         </specs>
         <functions>
             <function>$l10n_function_feederBale</function>
+				<function>
+					<en>Disperses silobales and fermented bales</en>
+					<de>Verteilt Siloballen und vergärte Ballen</de>
+				</function>
         </functions>
         <image active="$data/vehicles/store/store_kuhnPrimor3570.png" brand="$data/vehicles/store/brand_kuhn.png"/>
-        <price>19000</price>
-        <dailyUpkeep>20</dailyUpkeep>
+        <price>20000</price>
+        <dailyUpkeep>25</dailyUpkeep>
         <xmlFilename>vehicles/kuhnPrimor3570.xml</xmlFilename>
         <rotation>0</rotation>
         <brand>Kuhn</brand>
@@ -98,11 +102,11 @@ Um die Lieferlogistik zu vereinfachen, ist diese Presse im Auslieferungszustand 
 		</text>
 		<text name="agp8x_ferment">
 			<en>%s to %s: %s</en>
-			<!--de>%s zu %s: %s</de-->
+			<de>%s zu %s: %s</de>
 		</text>
 		<text name="agp8x_ferment_done">
 			<en>Fermented to %s</en>
-			<!--de>Zu %s geworden</de-->
+			<de>Zu %s geworden</de>
 		</text>
 	</l10n>
 </modDesc>

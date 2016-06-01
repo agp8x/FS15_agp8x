@@ -2,8 +2,8 @@
 <vehicle type="strawBlower">
     <annotation>Copyright (C) GIANTS Software GmbH, All Rights Reserved.</annotation>
     <name>
-        <en>Kuhn Primor 3570</en>
-        <de>Kuhn Primor 3570</de>
+        <en>Kuhn Primor 3570 HD</en>
+        <de>Kuhn Primor 3570 HD</de>
     </name>
     <typeDesc>$l10n_TypeDesc_StrawBlower</typeDesc>
     <filename>$data/vehicles/trailers/kuhn/kuhnPrimor3570.i3d</filename>

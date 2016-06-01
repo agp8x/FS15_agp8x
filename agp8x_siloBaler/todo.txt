@@ -1,4 +1,0 @@
-fermentingbales:
-	* mp test
-silobaler:
-	* mp test

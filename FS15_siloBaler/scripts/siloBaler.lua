@@ -55,8 +55,9 @@ function SiloBaler:keyEvent(unicode, sym, modifier, isDown)
 end;
 function SiloBaler:update(dt)
     if self:getIsActiveForInput() then
-        if InputBinding.hasEvent(InputBinding.IMPLEMENT_EXTRA3) then
+        if InputBinding.hasEvent(InputBinding.IMPLEMENT_EXTRA4) then
 			self:raiseDirtyFlags(self.workstateDirty);
+			SiloBalerWorkstateEvent.sendEvent(self, not self.siloBaling)
             self:switchWorkstate(not self.siloBaling);
         end;
     end;
@@ -70,7 +71,7 @@ function SiloBaler:draw()
 			if not self.siloBaling then
 				i = 1;
 			end;
-			g_currentMission:addHelpButtonText(g_i18n:getText("agp8x_change_workstate")..": "..g_i18n:getText("agp8x_workstate"..i), InputBinding.IMPLEMENT_EXTRA3);
+			g_currentMission:addHelpButtonText(g_i18n:getText("agp8x_change_workstate")..": "..g_i18n:getText("agp8x_workstate"..i), InputBinding.IMPLEMENT_EXTRA4);
         end
     end;
 end;
@@ -106,4 +107,47 @@ function SiloBaler:allowPickingUp(superFunc)
 		return false;
 	end;
 	return Baler.allowPickingUp(self, superFunc);
+end;
+
+--EVENT
+
+SiloBalerWorkstateEvent = {};
+SiloBalerWorkstateEvent_mt=Class(SiloBalerWorkstateEvent, Event);
+
+InitEventClass(SiloBalerWorkstateEvent, "SiloBalerWorkstateEvent");
+
+function SiloBalerWorkstateEvent:emptyNew()
+	local self = Event:new(SiloBalerWorkstateEvent_mt);
+	return self;
+end;
+
+function SiloBalerWorkstateEvent:new(object, newState)
+	local self = SiloBalerWorkstateEvent:emptyNew()
+	self.object = object;
+	self.newState = newState;
+	return self;
+end;
+function SiloBalerWorkstateEvent:readStream(streamId, connection)
+	self.object = networkGetObject(streamReadInt32(streamId));
+	self.newState = streamReadBool(streamId);
+	self:run(connection);
+end;
+function SiloBalerWorkstateEvent:writeStream(streamId, connection)
+	streamWriteInt32(streamId, networkGetObjectId(self.object));
+	streamWriteBool(streamId, self.newState);
+end;
+function SiloBalerWorkstateEvent:run(connection)
+	if not connection:getIsServer() then
+		g_server:broadcastEvent(SiloBalerWorkstateEvent:new(self.object, self.newState), nil, connection, self.object);
+	end;
+	self.object:switchWorkstate(self.newState)
+end;
+function SiloBalerWorkstateEvent.sendEvent(vehicle, newState, noEventSend)
+	if noEventSend == nil or noEventSend == false then
+		if g_server ~= nil then
+			g_server:broadcastEvent(SiloBalerWorkstateEvent:new(vehicle, newState), nil, nil, vehicle);
+		else
+			g_client:getServerConnection():sendEvent(SiloBalerWorkstateEvent:new(vehicle, newState));
+		end;
+	end;
 end;

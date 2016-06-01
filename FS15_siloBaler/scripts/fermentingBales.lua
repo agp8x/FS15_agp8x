@@ -6,7 +6,7 @@
 --
 -- Bales mounted by a baleLoader are resetted on loading, because GIANTS rather has redundant code to save bales rather than calling Bale.getSaveAttributesAndNodes() when saving a BaleLoader.
 --
--- To add other fermenting bales: load a .lua appending the table BaleUtil.fermentingBales just like lines 1-1 below.
+-- To add other fermenting bales: load a .lua appending the table BaleUtil.fermentingBales just like lines 120-144 below.
 -- Fermenting bales objects (i3d file) need to have an "isFermentingBale" User Attribute as flag.
 
 FermentingBale = {textSize=0.05, radius=5}
@@ -34,7 +34,6 @@ function FermentingBale:setNodeId(nodeId)
 		end;
 		if self.loadedFillType then
 			self.fillType = self.loadedFillType;
-			self.fermentingDuration = nil;
 			self.fermentingLoaded = false;
 		end;
 	end;
@@ -73,7 +72,7 @@ function FermentingBale:updateTick(dt)
 		self.fermentingDuration = self.fermentingDuration - dt;
 		if self.fermentingDuration < 0 then
 			self.fillType = self.fermentingTarget;
-			self.fermentingDuration = nil;
+			self.fermentingDuration = -1;
 			self.fermentingLoaded = false;
 			FermentingBale.setNodeId(self, self.nodeId);
 		end;

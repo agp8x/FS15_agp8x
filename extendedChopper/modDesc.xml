@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<modDesc descVersion="23">
+    <author>agp8x</author>
+    <version>1.0</version>
+    <title>
+        <en>Xtended choppa</en>
+        <de>Xtended choppa</de>
+    </title>
+    <description>
+        <en><![CDATA[Xtended choppa]]></en>
+    </description>
+    <iconFilename>siloBaler.png</iconFilename>
+    <multiplayer supported="true"/>
+	<extraSourceFiles>
+        <sourceFile filename="xtendedChoppa.lua" />
+    </extraSourceFiles>
+</modDesc>
